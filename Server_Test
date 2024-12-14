@@ -1,0 +1,31 @@
+package main
+
+import (
+	"net/http"
+)
+
+type api struct {
+	addr string // Przechowuje adres, na którym serwer będzie nasłuchiwał
+}
+
+func (a *api) getUsersHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Users list ...")) // Wysyła listę użytkowników jako odpowiedź
+}
+
+func (a *api) createUsersHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Created user!")) // Wysyła potwierdzenie utworzenia użytkownika jako odpowiedź
+}
+
+func main() {
+	api := &api{addr: ":8080"} // Inicjalizuje strukturę api z adresem ":8080"
+	mux := http.NewServeMux()  // Tworzy nowy multiplexer HTTP
+
+	srv := &http.Server{
+		Addr:    api.addr, // Ustawia adres serwera na ":8080"
+		Handler: mux,      // Ustawia multiplexer jako główny handler
+	}
+	mux.HandleFunc("GET /users", api.getUsersHandler)      // Rejestruje handler dla żądania GET /users
+	mux.HandleFunc("POST /userrs", api.createUsersHandler) // Rejestruje handler dla żądania POST /userrs
+
+	srv.ListenAndServe() // Uruchamia serwer HTTP
+}
