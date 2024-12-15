@@ -1,10 +1,19 @@
 package main // Pakiet główny
 
-import "log" // Importowanie pakietu logowania
+import (
+	//"Go_Course/internal/env"
+	"github.com/joho/godotenv"
+	"log"
+	"os"
+) // Importowanie pakietu logowania
 
 func main() { // Funkcja główna
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Brak pliku .env lub nie można go załadować, kontynuacja bez .env")
+	}
 	cfg := config{ // Tworzenie nowej konfiguracji
-		addr: ":8080", // Ustawianie adresu serwera
+		addr: os.Getenv("ADDR"), // Ustawianie adresu serwera
 	}
 
 	app := &application{ // Tworzenie nowej aplikacji
